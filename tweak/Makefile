@@ -13,6 +13,7 @@ LuauConsoleTweak_FILES += $(wildcard luau/VM/src/*.cpp)
 LuauConsoleTweak_FILES += $(wildcard luau/Compiler/src/*.cpp)
 LuauConsoleTweak_FILES += $(wildcard luau/Ast/src/*.cpp)
 LuauConsoleTweak_FILES += $(wildcard luau/Bytecode/src/*.cpp)
+LuauConsoleTweak_FILES += $(wildcard luau/Common/src/*.cpp)
 
 # -fno-modules: the L1ghtmann toolchain's libc++ ships as Clang modules whose
 # __config_site header isn't resolvable when cross-compiling here; forcing
@@ -30,6 +31,6 @@ LuauConsoleTweak_CFLAGS += -Iluau/Common/include
 # search by default. Add it explicitly.
 LuauConsoleTweak_CFLAGS += -I$(THEOS)/toolchain/linux/iphone/include/x86_64-unknown-linux-gnu/c++/v1
 
-LuauConsoleTweak_FRAMEWORKS = UIKit Foundation QuartzCore
+LuauConsoleTweak_FRAMEWORKS = UIKit Foundation QuartzCore CoreGraphics
 
 include $(THEOS)/makefiles/tweak.mk
