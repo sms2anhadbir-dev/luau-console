@@ -167,14 +167,33 @@ static void LCInstallButton(UIWindow *window) {
 }
 
 // ─────────────────────────────────────────────────────────────────────────
-// Hook: install the button once the app has a window
+// Bootstrap — NO Substrate required.
+//
+// This dylib is injected via plain LC_LOAD_DYLIB (Scarlet / Sideloadly /
+// TrollStore etc.), so there is no MobileSubstrate to %hook with. Instead we
+// register an NSNotificationCenter observer from a constructor: when the app
+// becomes active we install the W button into the key window. Works on any
+// non-jailbroken sideload.
 // ─────────────────────────────────────────────────────────────────────────
-%hook UIApplication
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    BOOL r = %orig;
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        LCInstallButton(application.keyWindow ?: application.windows.firstObject);
+@interface LCBootstrap : NSObject
+@end
+
+@implementation LCBootstrap
++ (void)appBecameActive:(NSNotification *)note {
+    // Delay slightly so the app's own UI has finished setting up its window.
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.8 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        UIApplication *app = UIApplication.sharedApplication;
+        UIWindow *window = app.keyWindow ?: app.windows.firstObject;
+        LCInstallButton(window);
     });
-    return r;
 }
-%end
+@end
+
+__attribute__((constructor))
+static void LCInit(void) {
+    [NSNotificationCenter.defaultCenter
+        addObserver:[LCBootstrap class]
+           selector:@selector(appBecameActive:)
+               name:UIApplicationDidBecomeActiveNotification
+             object:nil];
+}

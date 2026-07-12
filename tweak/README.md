@@ -48,10 +48,15 @@ Use the `inject-dylib.sh` from `hello-world-ipa-test`:
 
 ## Notes
 
-- **Substrate dependency**: the tweak uses a `%hook` on `UIApplication`, so it
-  needs a Substrate/ElleKit-capable runtime (jailbroken device, or a sideload
-  setup that bundles Substrate) to actually fire the hook. On an ordinary
-  sideload without Substrate, the button won't appear — the hook never runs.
+- **No Substrate required**: this tweak does **not** use `%hook`. It installs
+  the W button from a constructor (`__attribute__((constructor))`) that
+  registers for `UIApplicationDidBecomeActiveNotification`. That means it works
+  with plain dylib injection via **Scarlet / Sideloadly / TrollStore** on a
+  non-jailbroken device — no jailbreak, no MobileSubstrate.
+- **Scarlet install**: point Scarlet at your app + this `LuauConsoleTweak.dylib`
+  and let it inject + re-sign. The filter plist (`LuauConsoleTweak.plist`) is
+  only used by Substrate-based loaders; Scarlet injects the dylib directly, so
+  the plist is harmless but unused in that path.
 - **Compile time**: the first `make package` compiles the whole Luau VM
   (~100+ source files), so it takes a few minutes. Subsequent builds only
   recompile `Tweak.xm` / `LuauConsole.cpp`.
