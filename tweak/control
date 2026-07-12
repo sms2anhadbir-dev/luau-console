@@ -1,0 +1,9 @@
+Package: com.example.luauconsole
+Name: LuauConsole
+Depends: mobilesubstrate
+Version: 1.0.0
+Architecture: iphoneos-arm64
+Maintainer: SMS2A <kulbir.singhs@gmail.com>
+Author: SMS2A
+Section: Tweaks
+Description: In-app Luau console (W button + code editor popup) for your own app

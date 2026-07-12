@@ -1,4 +1,8 @@
 build/
+tweak/luau/
+tweak/.theos/
+tweak/packages/
+.theos/
 .cmake/
 CMakeCache.txt
 CMakeFiles/
