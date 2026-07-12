@@ -29,19 +29,22 @@
     self.view.backgroundColor = [UIColor colorWithRed:0.1 green:0.1 blue:0.15 alpha:0.97];
 
     self.console = new LuauConsole();
-    __weak typeof(self) weakSelf = self;
-    self.console->SetOutputCallback([weakSelf](const std::string &msg, bool isError) {
+    // Not captured __weak: this closure lives inside self.console, a raw
+    // C++ object that self itself deletes in -dealloc (see above), so the
+    // closure's lifetime is already bounded by self's lifetime by
+    // construction — it can never fire after self is torn down.
+    LCConsoleViewController *consoleSelf = self;
+    self.console->SetOutputCallback([consoleSelf](const std::string &msg, bool isError) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            if (!weakSelf) return;
             NSString *line = [NSString stringWithUTF8String:msg.c_str()];
             NSDictionary *attrs = @{
                 NSForegroundColorAttributeName: isError ? [UIColor systemRedColor] : [UIColor systemGreenColor],
                 NSFontAttributeName: [UIFont fontWithName:@"Menlo" size:12] ?: [UIFont systemFontOfSize:12]
             };
-            NSMutableAttributedString *m = [weakSelf.outputConsole.attributedText mutableCopy] ?: [NSMutableAttributedString new];
+            NSMutableAttributedString *m = [consoleSelf.outputConsole.attributedText mutableCopy] ?: [NSMutableAttributedString new];
             [m appendAttributedString:[[NSAttributedString alloc] initWithString:[line stringByAppendingString:@"\n"] attributes:attrs]];
-            weakSelf.outputConsole.attributedText = m;
-            [weakSelf.outputConsole scrollRangeToVisible:NSMakeRange(m.length, 0)];
+            consoleSelf.outputConsole.attributedText = m;
+            [consoleSelf.outputConsole scrollRangeToVisible:NSMakeRange(m.length, 0)];
         });
     });
 
