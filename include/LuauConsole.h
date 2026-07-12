@@ -42,6 +42,7 @@ private:
     Instance game_;
     Instance workspace_;
     std::unordered_map<std::string, Instance*> services_;
+    OutputCallback outputCallback_;
 
     void OpenLibraries();
     void RegisterInstanceMetatable();
