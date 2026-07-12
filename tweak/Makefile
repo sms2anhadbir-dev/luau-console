@@ -23,6 +23,11 @@ LuauConsoleTweak_CFLAGS += -Iluau/Compiler/include -Iluau/Compiler/src
 LuauConsoleTweak_CFLAGS += -Iluau/Ast/include -Iluau/Ast/src
 LuauConsoleTweak_CFLAGS += -Iluau/Common/include
 
+# libc++'s __config includes <__config_site>, which lives in the toolchain's
+# target-specific include dir that the arm64-apple-ios cross-compile doesn't
+# search by default. Add it explicitly.
+LuauConsoleTweak_CFLAGS += -I$(THEOS)/toolchain/linux/iphone/include/x86_64-unknown-linux-gnu/c++/v1
+
 LuauConsoleTweak_FRAMEWORKS = UIKit Foundation QuartzCore
 
 include $(THEOS)/makefiles/tweak.mk
