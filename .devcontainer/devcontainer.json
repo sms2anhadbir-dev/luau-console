@@ -1,0 +1,18 @@
+{
+  "name": "LuauConsole",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu-22.04",
+  "features": {
+    "ghcr.io/devcontainers/features/git:1": {},
+    "ghcr.io/devcontainers/features/cmake:1": {}
+  },
+  "postCreateCommand": "chmod +x setup-codespaces.sh build.sh && ./setup-codespaces.sh",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-vscode.cpptools",
+        "ms-vscode.cmake-tools",
+        "twxs.cmake"
+      ]
+    }
+  }
+}
