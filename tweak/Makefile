@@ -17,8 +17,8 @@ LuauConsoleTweak_FILES += $(wildcard luau/Bytecode/src/*.cpp)
 # -fno-modules: the L1ghtmann toolchain's libc++ ships as Clang modules whose
 # __config_site header isn't resolvable when cross-compiling here; forcing
 # textual includes avoids the "could not build module 'std_*'" wall of errors.
-LuauConsoleTweak_CFLAGS  = -fobjc-arc -I../include -fno-modules
-LuauConsoleTweak_CCFLAGS = -std=c++17 -fno-modules
+LuauConsoleTweak_CFLAGS  = -fobjc-arc -I../include -fno-modules -Wno-deprecated-declarations
+LuauConsoleTweak_CCFLAGS = -std=c++17 -fno-modules -fobjc-arc -Wno-deprecated-declarations
 LuauConsoleTweak_CFLAGS += -Iluau/VM/include -Iluau/VM/src
 LuauConsoleTweak_CFLAGS += -Iluau/Compiler/include -Iluau/Compiler/src
 LuauConsoleTweak_CFLAGS += -Iluau/Ast/include -Iluau/Ast/src
