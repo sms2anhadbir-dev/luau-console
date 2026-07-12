@@ -13,8 +13,11 @@ LuauConsoleTweak_FILES += $(wildcard luau/VM/src/*.cpp)
 LuauConsoleTweak_FILES += $(wildcard luau/Compiler/src/*.cpp)
 LuauConsoleTweak_FILES += $(wildcard luau/Ast/src/*.cpp)
 
-LuauConsoleTweak_CFLAGS  = -fobjc-arc -I../include
-LuauConsoleTweak_CCFLAGS = -std=c++17
+# -fno-modules: the L1ghtmann toolchain's libc++ ships as Clang modules whose
+# __config_site header isn't resolvable when cross-compiling here; forcing
+# textual includes avoids the "could not build module 'std_*'" wall of errors.
+LuauConsoleTweak_CFLAGS  = -fobjc-arc -I../include -fno-modules
+LuauConsoleTweak_CCFLAGS = -std=c++17 -fno-modules
 LuauConsoleTweak_CFLAGS += -Iluau/VM/include -Iluau/VM/src
 LuauConsoleTweak_CFLAGS += -Iluau/Compiler/include -Iluau/Compiler/src
 LuauConsoleTweak_CFLAGS += -Iluau/Ast/include -Iluau/Ast/src
