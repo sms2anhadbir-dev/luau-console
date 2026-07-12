@@ -43,6 +43,18 @@ By default `CMakeLists.txt` fetches Luau from its GitHub repo via
 block and point `target_link_libraries(luauconsole PUBLIC ...)` at your
 existing `Luau.Compiler` / `Luau.VM` targets instead.
 
+## iOS Integration
+
+For iOS games, the `ios/` folder contains a ready-made popup console UI:
+
+- **`LuauConsoleViewController.mm`** — the modal console window (code editor + output)
+- **`LuauConsoleButton.mm`** — a floating "W" button at top-center that opens it
+
+Just add them to your iOS project, instantiate `LuauConsoleButton` in your game's
+main view controller, and wire your C++ `LuauConsole` instance to the UI bridge.
+
+See `ios/INTEGRATION.md` for setup steps.
+
 ## Wiring in real engine objects
 
 `Instance` (`include/Instance.h`) is a plain base class — `Name`,
